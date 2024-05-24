@@ -2,24 +2,27 @@ from kafka import KafkaProducer
 from json import dumps
 import pandas as pd
 from time import sleep
-import datetime as dt 
+import datetime as dt
+import sys
+import six
 
-from functions import select_features, continent_dummies
+if sys.version_info >= (3, 12, 0):
+    sys.modules['kafka.vendor.six.moves'] = six.moves
+
+from utilitys import select_features
+
 
 def data_test():
-    test = pd.read_csv("data/X_test.csv")
+    test = pd.read_csv("notebooks/data/x_test.csv")
     print("Columns in the test dataset:", test.columns.tolist())
     test = select_features(test)
     print("Columns after selecting features:", test.columns.tolist())
-    test = continent_dummies(test)
-    print("Columns after getting continent dummies:", test.columns.tolist())
 
-    y_test = pd.read_csv("data/y_test.csv")
+    y_test = pd.read_csv("notebooks/data/y_test.csv")
     print("Columns in y_test:", y_test.columns.tolist())
-    test['happiness_score'] = y_test['happiness_score']
+    test['HAPPINESS_SCORE'] = y_test['HAPPINESS_SCORE']
 
     return test
-
 
 
 def kafka_producer(df_test):
@@ -36,6 +39,7 @@ def kafka_producer(df_test):
 
     print("The rows were sent successfully!")
 
+
 if __name__ == '__main__':
-    df_test = data_test()  
+    df_test = data_test()
     kafka_producer(df_test)
