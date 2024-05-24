@@ -1,4 +1,5 @@
 config
-database.ini
+database.json
 .env
 ws3
+__pycache__
