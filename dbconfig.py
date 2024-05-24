@@ -45,7 +45,6 @@ def create_table(table_name):
             'HAPPINESS_PREDICTION': pd.Series(dtype='float')
         })
         df.to_sql(table_name, engine, if_exists='replace', index=False)
-        # Verify table creation
     else:
         print(f"Table '{table_name}' already exists.")
 

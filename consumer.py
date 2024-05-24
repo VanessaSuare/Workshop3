@@ -15,8 +15,8 @@ def predict(data):
 
     df = pd.DataFrame([data])
 
-    prediction = model.predict(df.drop(columns=['happiness_score'], axis=1, errors='ignore'))
-    df['prediction'] = prediction
+    prediction = model.predict(df.drop(columns=['HAPPINESS_SCORE'], axis=1, errors='ignore'))
+    df['HAPPINESS_PREDICTION'] = prediction
 
     return df
 
@@ -39,11 +39,11 @@ def kafka_consumer():
         try:
             df_with_prediction = predict(message_data)
             print(f"Data with prediction: {df_with_prediction}")
-            dbconfig.load_data(df_with_prediction, 'Prediction')
+            dbconfig.load_data(df_with_prediction, 'prediction')
         except ImportError as e:
             print(f"Error in prediction: {e}")
 
 
 if __name__ == '__main__':
-    dbconfig.create_table('Prediction')
+    dbconfig.create_table('prediction')
     kafka_consumer()
